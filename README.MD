@@ -1,4 +1,4 @@
-# PixEd: Pixelize you pictures.
+# PixIt: Pixelize you pictures.
 ---
 ## Input
 ![](pixilizer/in.jpeg)
