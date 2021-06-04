@@ -10,4 +10,4 @@ Px = Pixilizer(pixel_relative_size=1)
 rez, _ = Px.forward(image, True, 4, 10)
 
 pil_rez = np_to_pil(rez, 1.2)
-pil_rez.show()
+pil_rez.save("out.png")
