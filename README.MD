@@ -1,1 +1,1 @@
-# PixEd: Pixelize you pictures.
+# PixId: Pixelize you pictures.
