@@ -8,8 +8,9 @@ from pixilizer.image import Pixilizer
 from pixilizer.utils import *
 
 telebot.apihelper.READ_TIMEOUT = 5
-token = os.environ['TELEGRAM_TOKEN']
-bot = telebot.TeleBot(token)
+
+# token = os.environ['TELEGRAM_TOKEN']
+bot = telebot.TeleBot('1775054566:AAH2Lnm_gpoPZP_hL64SqUW4Ss5DP1v0_CQ')
 Px = Pixilizer(pixel_relative_size=1)
 logger.add("overall.log")
 logger.info("Bot initialized")
@@ -95,4 +96,4 @@ def log_dislike(call: types.CallbackQuery):
     pass
 
 
-bot.infinity_polling(False)
+bot.polling()
