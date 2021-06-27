@@ -24,12 +24,7 @@ def image_resize(image, width=None, height=None, inter=cv2.INTER_AREA):
 
 
 class palettedImage(object):
-    def __init__(self,
-                 imgSource,
-                 imgPath='test.jpg',
-                 clusters=8,
-                 colorOffset=3,
-                 regime=0):
+    def __init__(self, imgSource, imgPath='test.jpg', clusters=8, colorOffset=3, regime=0):
         self.imgSource = imgSource
         if isinstance(imgSource, str):
             self.imgPath = imgSource
@@ -43,10 +38,8 @@ class palettedImage(object):
         self.regime = regime
         self.colorOffset = colorOffset
         self.bar = None
-        self.outBarPath = imgPath.replace(
-            imgPath.split("/")[-1], "BAR_" + imgPath.split("/")[-1])
-        self.outImgPath = imgPath.replace(
-            imgPath.split("/")[-1], "paletted_" + imgPath.split("/")[-1])
+        self.outBarPath = imgPath.replace(imgPath.split("/")[-1], "BAR_" + imgPath.split("/")[-1])
+        self.outImgPath = imgPath.replace(imgPath.split("/")[-1], "paletted_" + imgPath.split("/")[-1])
 
     @staticmethod
     def plot_colors_rel(hist, centroids, offset):
@@ -62,8 +55,7 @@ class palettedImage(object):
         for (percent, color) in prs:
             # plot the relative percentage of each cluster
             endX = startX + (percent * 300)
-            cv2.rectangle(bar, (int(startX), 0), (int(endX), 50),
-                          color.astype("uint8").tolist(), -1)
+            cv2.rectangle(bar, (int(startX), 0), (int(endX), 50), color.astype("uint8").tolist(), -1)
             startX = endX
 
         # return the bar chart
@@ -88,10 +80,8 @@ class palettedImage(object):
 
             new_length = 300 - margin * (clusters - 1)
             endX = startX + new_length / clusters
-            cv2.rectangle(bar, (int(startX), 0), (int(endX), 50),
-                          color.astype("uint8").tolist(), -1)
-            cv2.rectangle(bar, (int(endX), 0), (int(endX + margin), 50),
-                          (255, 255, 255), -1)
+            cv2.rectangle(bar, (int(startX), 0), (int(endX), 50), color.astype("uint8").tolist(), -1)
+            cv2.rectangle(bar, (int(endX), 0), (int(endX + margin), 50), (255, 255, 255), -1)
             startX = endX + margin
 
         # return the bar chart
@@ -121,8 +111,7 @@ class palettedImage(object):
         image_copy = image_resize(image, width=400)
         self.im_cop = image_copy
         self.image = image
-        pixelImage = image_copy.reshape(
-            (image_copy.shape[0] * image_copy.shape[1], 3))
+        pixelImage = image_copy.reshape((image_copy.shape[0] * image_copy.shape[1], 3))
         self.pixelImage = pixelImage
         # Perform clustering
         clt = KMeans(n_clusters=self.clusters + (self.colorOffset))
@@ -135,13 +124,11 @@ class palettedImage(object):
 
         self.centers = []
 
-        pinformed = np.array([[pixelImage[i], clt.labels_[i], i]
-                              for i in range(pixelImage.shape[0])])
+        pinformed = np.array([[pixelImage[i], clt.labels_[i], i] for i in range(pixelImage.shape[0])])
         self.infd = pinformed
         for i in range(0, len(np.unique(clt.labels_))):
             val = sorted(pinformed[np.where(clt.labels_ == i)],
-                         key=lambda x: spatial.distance.euclidean(
-                             x[0], self.centroids[i]))[0]
+                         key=lambda x: spatial.distance.euclidean(x[0], self.centroids[i]))[0]
             # print(self.centroids[i], val[2] // 400, val[2] % 400)
             # print(val)
             # print(val[2] // 400, val[2] % 400)
@@ -150,22 +137,17 @@ class palettedImage(object):
                 int(val[2] // 400 / image_copy.shape[0] * image.shape[0])
             ])
 
-        outData = sorted(list(zip(self.centroids, self.hist, self.centers)),
-                         key=lambda x: x[1])
+        outData = sorted(list(zip(self.centroids, self.hist, self.centers)), key=lambda x: x[1])
         #print(self.outData)
         self.outData = []
-        self.outData.extend(
-            outData[:(len(self.centroids) - self.colorOffset) // 2 + 1])
-        self.outData.extend(
-            outData[-(len(self.centroids) - self.colorOffset) // 2 + 1:])
+        self.outData.extend(outData[:(len(self.centroids) - self.colorOffset) // 2 + 1])
+        self.outData.extend(outData[-(len(self.centroids) - self.colorOffset) // 2 + 1:])
         if regime == 0:
             print("Using relative palette colors scaling")
-            self.bar = self.plot_colors_rel(hist, clt.cluster_centers_,
-                                            self.colorOffset)
+            self.bar = self.plot_colors_rel(hist, clt.cluster_centers_, self.colorOffset)
         elif regime == 1:
             print("Using absolute palette colors scaling")
-            self.bar = self.plot_colors_abs(hist, clt.cluster_centers_,
-                                            self.colorOffset, self.clusters, 5)
+            self.bar = self.plot_colors_abs(hist, clt.cluster_centers_, self.colorOffset, self.clusters, 5)
         else:
             raise ValueError("No such regime")
         self.barImage = image_resize(self.bar, width=int(image.shape[1]))
@@ -199,13 +181,7 @@ class palettedImage(object):
 
     @staticmethod
     def create_data_dict(data):
-        d = [{
-            'r': int(i[0][0]),
-            'g': int(i[0][1]),
-            'b': int(i[0][2]),
-            'x': i[2][0],
-            'y': i[2][1]
-        } for i in (data)]
+        d = [{'r': int(i[0][0]), 'g': int(i[0][1]), 'b': int(i[0][2]), 'x': i[2][0], 'y': i[2][1]} for i in (data)]
         return d
 
     def get_params(self):
@@ -219,8 +195,7 @@ class palettedImage(object):
             x = data[i]['x']
             y = data[i]['y']
             r = 50
-            draw.ellipse((x - r, y - r, x + r, y + r),
-                         (data[i]['r'], data[i]['g'], data[i]['b']),
+            draw.ellipse((x - r, y - r, x + r, y + r), (data[i]['r'], data[i]['g'], data[i]['b']),
                          outline='white',
                          width=5)
         image.save("test.jpg")

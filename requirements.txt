@@ -1,0 +1,9 @@
+opencv_python
+loguru
+numpy
+imageio
+scipy
+matplotlib
+Pillow
+pyTelegramBotAPI
+scikit_learn
