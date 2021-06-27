@@ -9,9 +9,10 @@ from pixilizer.utils import *
 
 telebot.apihelper.READ_TIMEOUT = 5
 
-# token = os.environ['TELEGRAM_TOKEN']
-bot = telebot.TeleBot('1775054566:AAH2Lnm_gpoPZP_hL64SqUW4Ss5DP1v0_CQ')
+token = os.environ['TELEGRAM_TOKEN']
+bot = telebot.TeleBot(token)
 Px = Pixilizer(pixel_relative_size=1)
+
 logger.add("overall.log")
 logger.info("Bot initialized")
 
